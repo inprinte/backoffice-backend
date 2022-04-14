@@ -44,7 +44,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 			utils.CheckErr(err)
 
 			// create the sql query
-			sqlQuery := ("INSERT INTO user (email, first_name, last_name, password, phone, is_alive, id_role, id_address) VALUES ('" + user.Email + "', '" + user.Firstname + "', '" + user.Lastname + "', '" + user.Password + "', '" + user.Phone + "', " + strconv.FormatBool(user.IsAlive) + ", (SELECT id FROM role WHERE role = '" + user.Role + "'), " + strconv.Itoa(lastInsertIDAddress) + ");")
+			sqlQuery := ("INSERT INTO user (email, first_name, last_name, password, phone, is_alive, id_role, id_address) VALUES ('" + user.Email + "', '" + user.Firstname + "', '" + user.Lastname + "', '" + utils.HashPassword(user.Password) + "', '" + user.Phone + "', " + strconv.FormatBool(user.IsAlive) + ", (SELECT id FROM role WHERE role = '" + user.Role + "'), " + strconv.Itoa(lastInsertIDAddress) + ");")
 
 			// execute the sql query
 			_, err = db.Exec(sqlQuery)
@@ -69,7 +69,7 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 					Email:     user.Email,
 					Firstname: user.Firstname,
 					Lastname:  user.Lastname,
-					Password:  user.Password,
+					Password:  utils.HashPassword(user.Password),
 					Phone:     user.Phone,
 					IsAlive:   user.IsAlive,
 					Role:      user.Role,

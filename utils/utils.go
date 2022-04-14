@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func SetCorsHeaders(w *http.ResponseWriter) {
@@ -90,4 +91,19 @@ func GetAllParams(r *http.Request, table string) (string, string) {
 	}
 	return orderBy, rangeBy
 
+}
+
+func HashPassword(password string) string {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	CheckErr(err)
+	return string(bytes)
+}
+
+func CheckPassword(password, hashedPassword string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+	return true
 }

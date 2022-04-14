@@ -11,6 +11,7 @@ import (
 func Update(w http.ResponseWriter, r *http.Request) {
 	//create cors header
 	utils.SetCorsHeaders(&w)
+	(w).Header().Set("Access - Control - Allow - Origin", "*")
 
 	if r.Method == "PUT" {
 

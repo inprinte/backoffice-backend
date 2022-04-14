@@ -26,9 +26,10 @@ func CheckLogin(email, password string) bool {
 	// close the database connection
 	db.Close()
 
-	// check informations
-	if passwordDB == password && is_alive && id_role == 1 {
+	// check if the user is alive and if the password is good
+	if utils.CheckPassword(password, passwordDB) && is_alive {
 		return true
+	} else {
+		return false
 	}
-	return false
 }
